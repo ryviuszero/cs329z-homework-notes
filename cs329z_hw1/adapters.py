@@ -40,6 +40,7 @@ from cs329z_hw1.types import (
     ParsedResponse,
     SearchResult,
     ToolCall,
+    ToolResult,
     ToolSpec,
 )
 
@@ -435,6 +436,52 @@ def run_email_qa(
 # ======================================================================
 
 
+class ToolRegistry:
+    def __init__(self) -> None:
+        # Dictionaries preserve registration order and support lookup by name.
+        self.tools: dict[str, ToolSpec] = {}
+
+    def register(self, tool: ToolSpec) -> None:
+        self.tools[tool.name] = tool
+
+    def schemas(self) -> list[dict]:
+        return [
+            {
+                "name": tool.name,
+                "description": tool.description,
+                "parameters": tool.parameters,
+            }
+            for tool in self.tools.values()
+        ]
+
+    def validate(self, name: str, args: dict) -> ToolResult | None:
+        from jsonschema import Draft202012Validator
+
+        tool = self.tools.get(name)
+        if tool is None:
+            return ToolResult(status="unknown_tool", content=f"Unknown tool: {name}")
+
+        try:
+            Draft202012Validator(tool.parameters).validate(args)
+        except Exception as error:
+            return ToolResult(status="invalid_args", content=str(error))
+
+        return None
+
+    def execute(self, name: str, args: dict) -> ToolResult:
+        validation_error = self.validate(name, args)
+        if validation_error is not None:
+            return validation_error
+
+        tool = self.tools[name]
+        try:
+            value = tool.fn(**args)
+            return ToolResult(status="ok", content=str(value))
+        except Exception as error:
+            return ToolResult(status="tool_error", content=str(error))
+
+
+
 def run_tool_registry(tools: list[ToolSpec]) -> Any:
     """Problem (tool_registry).
 
@@ -459,7 +506,10 @@ def run_tool_registry(tools: list[ToolSpec]) -> Any:
       ``fn(**args)``: status "ok", ``content == str(return value)``.
     * The registry keeps working after any of these outcomes.
     """
-    raise NotImplementedError
+    registry = ToolRegistry()
+    for tool in tools:
+        registry.register(tool)
+    return registry
 
 
 def run_render_tools(schemas: list[dict]) -> str:
