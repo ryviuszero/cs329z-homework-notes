@@ -27,6 +27,8 @@ of this call.
 
 from __future__ import annotations
 
+import json
+
 from typing import Any, Callable, Optional
 
 from cs329z_hw1.types import (
@@ -61,7 +63,71 @@ def run_priority(email: Email, lm: LMCallable) -> dict:
     * The function does not raise and does not modify ``email``.
     * Live: at least 85% agreement with tests/fixtures/priority_gold.json.
     """
-    raise NotImplementedError
+    def parsed_reply(raw_reply: str) -> dict:
+        """Prefer validated JSON; fall back to the original text parser."""
+        try:
+            parsed = json.loads(raw_reply)
+        except json.JSONDecodeError:
+            parsed = None
+
+        if isinstance(parsed, dict):
+            category = parsed.get("category")
+            reason = parsed.get("reason")
+            if isinstance(category, str):
+                category = category.strip().lower()
+            if (
+                category in ("urgent", "normal", "ignore")
+                and isinstance(reason, str)
+                and reason.strip()
+            ):
+                return {"category": category, "reason": reason.strip()}
+
+        # Keep the existing keyword-based fallback for nonconforming replies.
+        raw_reply_lower = raw_reply.lower()
+        if "urgent" in raw_reply_lower:
+            category = "urgent"
+        elif "normal" in raw_reply_lower:
+            category = "normal"
+        elif "ignore" in raw_reply_lower:
+            category = "ignore"
+        else:
+            category = "unknown"
+
+        reason_start = raw_reply.find("Reason: ")
+        reason = (
+            raw_reply[reason_start + len("Reason: "):].strip()
+            if reason_start != -1
+            else ""
+        )
+        return {"category": category, "reason": reason or "No reason provided."}
+
+    classification_instructions = f"""Classify this email from the recipient's perspective at the time it was sent.
+
+    Choose exactly one category:
+    - urgent: The recipient needs to take action, make a decision, or handle an ongoing problem they are responsible for, and action is required today, on the next working day, or by a deadline within two working days. Working days are Monday through Friday, measured from the email's date.
+    - normal: Legitimate work or personal mail addressed to this recipient or a small working group, without a deadline within the next two working days.
+    - ignore: Advertising, newsletters, mass announcements, or automated notifications that require no action from this recipient.
+
+    Consider the sender, recipients, email date, subject, and body together. The subject alone does not determine priority. Advertising is not urgent just because it says "act now". An automated message requiring this recipient to act can be normal or urgent depending on its deadline. Personal messages from someone the recipient knows are normal.
+
+    Return only a JSON object with exactly two fields:
+    - "category": one of "urgent", "normal", or "ignore".
+    - "reason": one concise sentence explaining the classification using evidence from the email.
+
+    Email to classify:
+    <email>
+    From: {email["from"]}
+    To: {", ".join(email["to"])}
+    Date: {email["date"]}
+    Subject: {email["subject"]}
+    Body:
+    {email["body"]}
+    </email>
+    """
+    message = [{"role": "user", "content": classification_instructions}]
+    raw_reply = lm(message)
+    result = parsed_reply(raw_reply)
+    return result
 
 
 def run_daily_digest(emails: list[Email], lm: LMCallable) -> str:
