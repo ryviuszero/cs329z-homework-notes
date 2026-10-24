@@ -232,7 +232,37 @@ def run_bm25_build(docs: list[str]) -> Any:
     back to ``run_bm25_search``. The index over the archive must build in
     under 15 seconds.
     """
-    raise NotImplementedError
+    from cs329z_hw1.tokenizer import tokenize
+
+    index = {
+        "postings": {},
+        "doc_lengths": [],
+        "doc_count": len(docs),
+        "avg_doc_length": 0.0,
+    }
+
+    tokenized_docs: list[list[str]] = []
+    for doc in docs:
+        tokens = tokenize(doc)
+        tokenized_docs.append(tokens)
+
+    postings = index["postings"]
+    for doc_id, tokens in enumerate(tokenized_docs):
+        index["doc_lengths"].append(len(tokens))
+
+        for token in tokens:
+            if token not in postings:
+                postings[token] = {}
+
+            if doc_id not in postings[token]:
+                postings[token][doc_id] = 0
+
+            postings[token][doc_id] += 1
+
+    if index["doc_count"] > 0:
+        index["avg_doc_length"] = sum(index["doc_lengths"]) / index["doc_count"]
+
+    return index
 
 
 def run_bm25_search(index: Any, query: str, k: int) -> list[tuple[int, float]]:
@@ -253,7 +283,43 @@ def run_bm25_search(index: Any, query: str, k: int) -> list[tuple[int, float]]:
       query on average over the archive, and 2 ms for a term that occurs in
       3 of 200,000 documents.
     """
-    raise NotImplementedError
+    import math
+    from cs329z_hw1.tokenizer import tokenize
+
+    def score_token(token: str) -> dict[int, float]:
+        postings = index["postings"].get(token, {})
+        if not postings:
+            return {}
+
+        n = index["doc_count"]
+        nt = len(postings)
+        avgdl = index["avg_doc_length"]
+        k1 = 1.5
+        b = 0.75
+        idf = math.log(1 + (n - nt + 0.5) / (nt + 0.5))
+
+        token_scores = {}
+        for doc_id, frequency in postings.items():
+            length = index["doc_lengths"][doc_id]
+            score = idf * (
+                frequency * (k1 + 1)
+                / (frequency + k1 * (1 - b + b * length / avgdl))
+            )
+            token_scores[doc_id] = score
+        return token_scores
+
+    if k <= 0:
+        return []
+
+    # Preserve query order while counting each distinct token once.
+    query_tokens = list(dict.fromkeys(tokenize(query)))
+    scores: dict[int, float] = {}
+    for token in query_tokens:
+        for doc_id, score in score_token(token).items():
+            scores[doc_id] = scores.get(doc_id, 0.0) + score
+
+    results = sorted(scores.items(), key=lambda item: (-item[1], item[0]))
+    return results[:k]
 
 
 def run_email_qa(
