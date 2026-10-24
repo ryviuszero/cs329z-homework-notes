@@ -1,0 +1,97 @@
+{
+  "retrieved_date": "2026-10-23",
+  "timezone": "Asia/Shanghai",
+  "files": [
+    {
+      "file": "slides/lecture01.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture01.pdf",
+      "bytes": 7832350,
+      "sha256": "c0640befa48fcf8cd7c7a52e25f09849c80ffee70dbaf2a8869f5087265a1125",
+      "status": "ok"
+    },
+    {
+      "file": "slides/lecture02.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture02.pdf",
+      "bytes": 17283240,
+      "sha256": "2c0a2253011428b32fcb3663fd0a1a8259be1205ad52f62cd811457be01871c4",
+      "status": "ok"
+    },
+    {
+      "file": "slides/lecture03.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture03.pdf",
+      "bytes": 3742107,
+      "sha256": "7122e4166f03337c4ff9763646506fd25b30979c076b7649fa7fb07117bf5fab",
+      "status": "ok"
+    },
+    {
+      "file": "slides/lecture04.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture04.pdf",
+      "bytes": 5996989,
+      "sha256": "96ddc3339edb615ff7a8623a88b89db10de1a0acdf0c9a5d3919d9f78a2e4716",
+      "status": "ok"
+    },
+    {
+      "file": "slides/lecture05.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture05.pdf",
+      "bytes": 14413415,
+      "sha256": "51c0176f7956e88339e083c5a404d45fea56af66a5c320aff6e1affd1a454055",
+      "status": "ok"
+    },
+    {
+      "file": "slides/lecture06.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture06.pdf",
+      "bytes": 10861442,
+      "sha256": "a2eea4d443d8667bbfdbb972af52ff00f41d9769b8f3e41ab08c61016aa85133",
+      "status": "ok"
+    },
+    {
+      "file": "slides/lecture07.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture07.pdf",
+      "bytes": 21846259,
+      "sha256": "1864e30c516a18a61decf47f0f99958e5d97a14bff32f2cb49beacb668b0f1ed",
+      "status": "ok"
+    },
+    {
+      "file": "slides/lecture08.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture08.pdf",
+      "bytes": 25841933,
+      "sha256": "ea66373b66d2697e7258143372109469227fe95b153d8f7ae9041599c47730c9",
+      "status": "ok"
+    },
+    {
+      "file": "slides/lecture09.pdf",
+      "url": "https://web.stanford.edu/class/cs329z/slides/lecture09.pdf",
+      "bytes": 22801606,
+      "sha256": "f2e56f94091f79d314f1e1650a30fc1c15f55059777fafdfa80bb5ba7f4b8606",
+      "status": "ok"
+    },
+    {
+      "file": "course/overview.html",
+      "url": "https://cs329z.stanford.edu/",
+      "bytes": 38057,
+      "sha256": "dc430e9f986e48cbd77c8fae7ad4cd27e817bac7197e3bb459842c6f28495a9a",
+      "status": "ok"
+    },
+    {
+      "file": "course/logistics.html",
+      "url": "https://cs329z.stanford.edu/logistics",
+      "bytes": 11724,
+      "sha256": "3e1caeb7e255658b26a160613109f11cb0ef31cae3d815c226d56aeafc990a88",
+      "status": "ok"
+    },
+    {
+      "file": "assignment1/handout.pdf",
+      "url": "https://raw.githubusercontent.com/cs329z/assignment1-harness/main/cs329z_assignment1_harness.pdf",
+      "bytes": 420885,
+      "sha256": "20f29273fb63672f470fd0ecd2499ce95ffcf0a03c5d1e5b1370a36aae53eb8d",
+      "status": "ok"
+    },
+    {
+      "file": "assignment1/README.md",
+      "url": "https://raw.githubusercontent.com/cs329z/assignment1-harness/main/README.md",
+      "bytes": 11684,
+      "sha256": "b3d4e24c01d153b15b1a37933cda76e175b6f059607dc3af75797dc794c197d7",
+      "status": "ok"
+    }
+  ]
+}

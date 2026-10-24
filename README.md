@@ -1,3 +1,48 @@
+# CS329Z Agent 工程学习记录
+
+基于 Stanford CS329Z《Engineering AI Agents》的个人学习仓库，集中保存 HW1 实现、测试、课件、题目中文译文和学习笔记。**这是进行中的学习记录，不是官方课程仓库或完整参考答案。**
+
+官方来源：[课程主页](https://cs329z.stanford.edu/) · [作业 starter](https://github.com/cs329z/assignment1-harness)。下方保留官方 starter 的环境与运行说明。
+
+## 从这里阅读
+
+- [课程资料总索引](materials/cs329z/README.md)：九讲课件、课程页面快照、题目及来源校验。
+- [HW1 英文原题](materials/cs329z/assignment1/handout.pdf) · [中文 PDF](materials/cs329z/assignment1/handout.zh-CN.pdf) · [中文文本](materials/cs329z/assignment1/handout.zh-CN.md)。译文为非官方学习辅助，以英文原文为准。
+- [当前进度](materials/cs329z/HW1_PROGRESS.md)：第 1—4 题完成；第 5 题确定性测试通过。
+- [BM25 优化笔记](materials/cs329z/assignment1/BM25优化笔记.md)。
+- [核心实现](cs329z_hw1/adapters.py) · [课程测试](tests/) · [独立检索实验](experiments/)。
+
+## 仓库结构
+
+```text
+cs329z_hw1/          作业接口与实现
+ tests/             课程测试和独立比较测试
+ data/              官方邮件压缩包、下载脚本与公司示例文档
+ experiments/       独立 BM25 实验，不替换提交实现
+ materials/cs329z/  课件、原题、中文译文、学习笔记与来源记录
+```
+
+## 开始运行
+
+在仓库根目录执行：
+
+```sh
+uv sync --locked --python 3.11
+cp .env.example .env
+uv run python data/download.py
+uv run pytest tests/test_tool_protocol.py -v -s
+```
+
+自行在 `.env` 填写模型配置，不要把密钥写进 `.env.example`。默认测试免费、不调用模型；未实现的后续题目仍会失败，建议按当前题目运行。真实模型测试另加 `-m live -s`，会发送测试材料并产生调用费用。
+
+## 隐私与资料来源
+
+忽略个人 `.env` 及 `.env.*`（保留模板）、`.venv/`、`.lm_cache/`、`runs/` 和解压的 `data/emails/`。官方 `data/emails.jsonl.gz` 压缩包保留。录屏、密钥和个人运行记录不属于本仓库的公开材料范围。
+
+代码的原始 MIT 声明保留于 [LICENSE](LICENSE)。课件、课程网页和题目保留原作者权利；其来源和校验值见 [manifest.json](materials/cs329z/manifest.json)，不统一声明为 MIT。资料的公开分发授权及课程对公开解答的要求仍需在发布前确认；当前整理供本地学习和审阅，尚未发布。
+
+## 官方 starter 使用说明
+
 # CS329Z Assignment 1: Building an Agentic Harness
 
 This is the starter repository for Assignment 1.

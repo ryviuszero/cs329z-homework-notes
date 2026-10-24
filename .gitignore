@@ -1,4 +1,6 @@
 .env
+.env.*
+!.env.example
 .venv/
 __pycache__/
 .pytest_cache/
@@ -8,3 +10,6 @@ data/raw/
 runs/
 *.pyc
 .DS_Store
+
+# Local learning plans are not part of the public homework materials.
+materials/cs329z/学习路线笔记.md
